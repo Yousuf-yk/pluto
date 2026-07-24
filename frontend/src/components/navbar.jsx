@@ -12,34 +12,34 @@ function Navbar() {
       <div className="flex items-center justify-between h-14 px-6 bg-white/40 backdrop-blur-md border border-white/30 shadow-lg rounded-[25px] font-sans transition-all duration-300">
         
         {/* Logo */}
-        <div className="text-2xl font-bold tracking-tighter text-indigo-950">
+        <div className="text-2xl font-bold tracking-tighter text-rose-200">
           pluto.
         </div>
 
         {/* Desktop Navigation Links */}
-        <div className="hidden md:flex space-x-8 text-sm font-medium text-gray-700">
-          <a href="#home" className="hover:text-indigo-600 transition-colors">Home</a>
-          <a href="#shop" className="hover:text-indigo-600 transition-colors">Shop</a>
-          <a href="#about" className="hover:text-indigo-600 transition-colors">About</a>
+        <div className="hidden md:flex space-x-8 text-sm font-medium text-rose-200">
+          <a href="#home" className="hover:text-rose-200 transition-colors">Home</a>
+          <a href="#shop" className="hover:text-rose-200 transition-colors">Shop</a>
+          <a href="#about" className="hover:text-rose-200 transition-colors">About</a>
         </div>
 
         {/* Desktop Icons */}
         <div className="hidden md:flex items-center space-x-2">
           <button 
             aria-label="Favorites" 
-            className="p-2 text-gray-700 hover:bg-white/60 hover:text-indigo-600 rounded-full transition-all"
+            className="p-2 text-gray-700 hover:bg-white/60 hover:text-rose-200 rounded-full transition-all"
           >
             <Heart size={20} />
           </button>
           <button 
             aria-label="Cart" 
-            className="p-2 text-gray-700 hover:bg-white/60 hover:text-indigo-600 rounded-full transition-all"
+            className="p-2 text-gray-700 hover:bg-white/60 hover:text-rose-200 rounded-full transition-all"
           >
             <ShoppingCart size={20} />
           </button>
           <button 
             aria-label="Settings" 
-            className="p-2 text-gray-700 hover:bg-white/60 hover:text-indigo-600 rounded-full transition-all"
+            className="p-2 text-gray-700 hover:bg-white/60 hover:text-rose-200 rounded-full transition-all"
           >
             <Settings size={20} />
           </button>
