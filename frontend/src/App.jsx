@@ -1,19 +1,52 @@
-import React from 'react'
-// import Navbar from "../components/navbar.jsx"
-// import ProductCard from "../pages/product.jsx"
-import Home from './pages/home.jsx'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Home from "./pages/home";
+import Login from "./pages/login";
+import Register from "./pages/register";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import Cart from "./pages/cart";
+import Wishlist from "./pages/Wishlist";
+
+function App() {
+
+    return (
+
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route
+                    path="/login"
+                    element={<Login />}
+                />
+                <Route
+                    path="/register"
+                    element={<Register />}
+                />
+                
+                <Route
+                    path="/cart"
+                    element={
+                        <ProtectedRoute>
+                            <Cart />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/wishlist"
+                    element={
+                        <ProtectedRoute>
+                            <Wishlist />
+                        </ProtectedRoute>
+                    }
+                />
+
+            </Routes>
 
 
-const App = () => {
-  return (
-    <div className="min-h-screen">
-      <Home />
-    </div>
+        </BrowserRouter>
 
-  )
+    );
+
 }
 
-export default App
-
-
- 
+export default App;

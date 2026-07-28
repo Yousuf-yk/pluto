@@ -1,84 +1,243 @@
-import React, { useState } from 'react';
-import { Settings, Heart, ShoppingCart, Menu, X } from 'lucide-react';
+import { useEffect, useState } from "react";
+import {
+  Heart,
+  ShoppingCart,
+  User,
+  Menu,
+  X,
+  Search,
+  LogOut
+} from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+
+import { getCart } from "../services/cartApi";
+import { getWishlist } from "../services/wishlistApi";
 
 function Navbar() {
+
   const [isOpen, setIsOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
+  const [wishlistCount, setWishlistCount] = useState(0);
+
+  const navigate = useNavigate();
+
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+
+    if (!token) return;
+
+    const loadData = async () => {
+
+      try {
+
+        const cart = await getCart();
+        const wishlist = await getWishlist();
+
+        setCartCount(cart.length);
+        setWishlistCount(wishlist.length);
+
+      } catch (err) {
+
+        console.log(err);
+
+      }
+
+    };
+
+    loadData();
+
+  }, []);
+
+  const logout = () => {
+
+    localStorage.removeItem("token");
+
+    navigate("/login");
+
+  };
 
   return (
-    // Fixed wrapper to keep the navbar floating at the top
-    <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] md:w-[90%] lg:w-[80%] z-50">
-      
-      {/* Main Navbar Bar */}
-      <div className="flex items-center justify-between h-14 px-6 bg-white/40 backdrop-blur-md border border-white/30 shadow-lg rounded-[25px] font-sans transition-all duration-300">
-        
+
+    <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-[96%] lg:w-[85%] z-50">
+
+      <div className="h-16 rounded-full bg-white/70 backdrop-blur-2xl border border-white shadow-xl px-7 flex justify-between items-center">
+
         {/* Logo */}
-        <div className="text-2xl font-bold tracking-tighter text-rose-200">
-          pluto.
+
+        <Link
+          to="/"
+          className="text-3xl font-black  text-gray-700"
+        >
+          Pluto.
+        </Link>
+
+        {/* Desktop */}
+
+        <div className="hidden md:flex items-center gap-8 text-gray-700 font-medium">
+
+          <Link to="/" className="hover:text-rose-600">
+            Home
+          </Link>
+
+          <Link to="/" className="hover:text-rose-600">
+            Shop
+          </Link>
+
         </div>
 
-        {/* Desktop Navigation Links */}
-        <div className="hidden md:flex space-x-8 text-sm font-medium text-rose-200">
-          <a href="#home" className="hover:text-rose-200 transition-colors">Home</a>
-          <a href="#shop" className="hover:text-rose-200 transition-colors">Shop</a>
-          <a href="#about" className="hover:text-rose-200 transition-colors">About</a>
+        {/* Right */}
+
+        <div className="hidden md:flex items-center gap-3">
+
+          <button className="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center">
+            <Search size={20}/>
+          </button>
+
+          <Link
+            to="/wishlist"
+            className="relative w-10 h-10 rounded-full hover:bg-pink-100 flex justify-center items-center"
+          >
+
+            <Heart size={20}/>
+
+            {wishlistCount > 0 && (
+
+              <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-pink-500 text-white text-xs flex justify-center items-center">
+
+                {wishlistCount}
+
+              </span>
+
+            )}
+
+          </Link>
+
+          <Link
+            to="/cart"
+            className="relative w-10 h-10 rounded-full hover:bg-indigo-100 flex justify-center items-center"
+          >
+
+            <ShoppingCart size={20}/>
+
+            {cartCount > 0 && (
+
+              <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-indigo-600 text-white text-xs flex justify-center items-center">
+
+                {cartCount}
+
+              </span>
+
+            )}
+
+          </Link>
+
+          {token ? (
+
+            <button
+              onClick={logout}
+              className="w-10 h-10 rounded-full hover:bg-red-100 flex justify-center items-center"
+            >
+
+              <LogOut size={20}/>
+
+            </button>
+
+          ) : (
+
+            <Link
+              to="/login"
+              className="w-10 h-10 rounded-full hover:bg-indigo-100 flex justify-center items-center"
+            >
+
+              <User size={20}/>
+
+            </Link>
+
+          )}
+
         </div>
 
-        {/* Desktop Icons */}
-        <div className="hidden md:flex items-center space-x-2">
-          <button 
-            aria-label="Favorites" 
-            className="p-2 text-gray-700 hover:bg-white/60 hover:text-rose-200 rounded-full transition-all"
-          >
-            <Heart size={20} />
-          </button>
-          <button 
-            aria-label="Cart" 
-            className="p-2 text-gray-700 hover:bg-white/60 hover:text-rose-200 rounded-full transition-all"
-          >
-            <ShoppingCart size={20} />
-          </button>
-          <button 
-            aria-label="Settings" 
-            className="p-2 text-gray-700 hover:bg-white/60 hover:text-rose-200 rounded-full transition-all"
-          >
-            <Settings size={20} />
-          </button>
-        </div>
+        {/* Mobile */}
 
-        {/* Mobile Menu Toggle */}
-        <div className="md:hidden flex items-center">
-          <button 
-            onClick={() => setIsOpen(!isOpen)} 
-            className="p-2 text-gray-700 hover:bg-white/60 rounded-full transition-all"
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="md:hidden"
+        >
+
+          {isOpen ? <X size={28}/> : <Menu size={28}/>}
+
+        </button>
+
       </div>
 
-      {/* Mobile Dropdown Menu */}
       {isOpen && (
-        <div className="absolute top-16 left-0 w-full bg-white/80 backdrop-blur-lg border border-white/30 rounded-2xl shadow-xl md:hidden p-4 flex flex-col space-y-2 animate-in fade-in slide-in-from-top-4 duration-200">
-          <a href="#home" className="block px-4 py-3 text-gray-800 font-medium hover:bg-white/60 rounded-xl transition-all">Home</a>
-          <a href="#shop" className="block px-4 py-3 text-gray-800 font-medium hover:bg-white/60 rounded-xl transition-all">Shop</a>
-          <a href="#about" className="block px-4 py-3 text-gray-800 font-medium hover:bg-white/60 rounded-xl transition-all">About</a>
-          
-          {/* Mobile Icons Row */}
-          <div className="flex justify-around pt-4 mt-2 border-t border-gray-300/50">
-            <button className="p-3 text-gray-700 hover:bg-white/60 hover:text-indigo-600 rounded-full transition-all">
-              <Heart size={24} />
+
+        <div className="mt-3 rounded-3xl bg-white shadow-xl overflow-hidden md:hidden">
+
+          <Link
+            to="/"
+            onClick={() => setIsOpen(false)}
+            className="block px-6 py-4 hover:bg-gray-100"
+          >
+            Home
+          </Link>
+
+          <Link
+            to="/wishlist"
+            onClick={() => setIsOpen(false)}
+            className="flex justify-between px-6 py-4 hover:bg-gray-100"
+          >
+            <span>Wishlist</span>
+
+            <span>{wishlistCount}</span>
+
+          </Link>
+
+          <Link
+            to="/cart"
+            onClick={() => setIsOpen(false)}
+            className="flex justify-between px-6 py-4 hover:bg-gray-100"
+          >
+            <span>Cart</span>
+
+            <span>{cartCount}</span>
+
+          </Link>
+
+          {token ? (
+
+            <button
+              onClick={logout}
+              className="w-full text-left px-6 py-4 hover:bg-red-100"
+            >
+
+              Logout
+
             </button>
-            <button className="p-3 text-gray-700 hover:bg-white/60 hover:text-indigo-600 rounded-full transition-all">
-              <ShoppingCart size={24} />
-            </button>
-            <button className="p-3 text-gray-700 hover:bg-white/60 hover:text-indigo-600 rounded-full transition-all">
-              <Settings size={24} />
-            </button>
-          </div>
+
+          ) : (
+
+            <Link
+              to="/login"
+              onClick={() => setIsOpen(false)}
+              className="block px-6 py-4 hover:bg-gray-100"
+            >
+
+              👤 Login
+
+            </Link>
+
+          )}
+
         </div>
+
       )}
+
     </nav>
+
   );
+
 }
 
 export default Navbar;
