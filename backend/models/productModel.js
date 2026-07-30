@@ -61,3 +61,21 @@ export const deleteProduct = async (id) => {
 
     return result.rows[0];
 };
+
+
+export const searchProductsModel = async (search) => {
+    const result = await db.query(
+        `
+        SELECT *
+        FROM products
+        WHERE
+            name ILIKE $1 OR
+            description ILIKE $1 OR
+            category ILIKE $1
+        ORDER BY id ASC;
+        `,
+        [`%${search}%`]
+    );
+
+    return result.rows;
+};

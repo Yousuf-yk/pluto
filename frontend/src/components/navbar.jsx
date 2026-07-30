@@ -19,7 +19,9 @@ function Navbar() {
   const [cartCount, setCartCount] = useState(0);
   const [wishlistCount, setWishlistCount] = useState(0);
 
+  const [search, setSearch] = useState("");
   const navigate = useNavigate();
+
 
   const token = localStorage.getItem("token");
 
@@ -57,6 +59,16 @@ function Navbar() {
 
   };
 
+  const handleSearch = (e) => {
+
+    if (e.key === "Enter") {
+
+      navigate(`/?search=${search}`);
+
+    }
+
+  };
+
   return (
 
     <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-[96%] lg:w-[85%] z-50">
@@ -76,13 +88,13 @@ function Navbar() {
 
         <div className="hidden md:flex items-center gap-8 text-gray-700 font-medium">
 
-          <Link to="/" className="hover:text-rose-600">
+          {/* <Link to="/" className="hover:text-rose-600">
             Home
           </Link>
 
           <Link to="/" className="hover:text-rose-600">
             Shop
-          </Link>
+          </Link> */}
 
         </div>
 
@@ -90,9 +102,20 @@ function Navbar() {
 
         <div className="hidden md:flex items-center gap-3">
 
-          <button className="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center">
-            <Search size={20}/>
-          </button>
+          <div className="hidden lg:flex items-center bg-gray-100 rounded-full px-3 py-2">
+
+            <Search size={18} className="text-gray-500 mr-2" />
+
+            <input
+              type="text"
+              placeholder="Search shoes..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={handleSearch}
+              className="bg-transparent outline-none text-sm w-40"
+            />
+
+          </div>
 
           <Link
             to="/wishlist"

@@ -5,19 +5,23 @@ import {
     getProduct,
     addProduct,
     editProduct,
-    removeProduct
+    removeProduct,
+    searchProducts
 } from "../controller/productContoller.js";
+
+
 
 const router = express.Router();
 
-router.get("/", getProducts);
+// Search must come before :id
+router.get("/search", searchProducts);
 
+router.get("/", getProducts);
 router.get("/:id", getProduct);
 
 router.post("/", addProduct);
-
 router.put("/:id", editProduct);
-
 router.delete("/:id", removeProduct);
+
 
 export default router;

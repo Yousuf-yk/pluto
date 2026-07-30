@@ -5,38 +5,57 @@ import Hero from "../components/hero";
 import Footer from "../components/footer";
 import Card from "../components/card";
 
-import { getProducts } from "../services/productApi";
+import { getProducts, searchProducts } from "../services/productApi";
+import { useSearchParams } from "react-router-dom";
+
 
 const Home = () => {
 
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const [searchParams] = useSearchParams();
+    const search = searchParams.get("search");
+
     useEffect(() => {
 
-        const fetchProducts = async () => {
+    const fetchProducts = async () => {
 
-            try {
+        try {
 
-                const data = await getProducts();
+            console.log("search =", search);
 
-                setProducts(data);
+            let data;
 
-            } catch (err) {
+            if (search) {
 
-                console.log(err);
+                data = await searchProducts(search);
 
-            } finally {
+            } else {
 
-                setLoading(false);
+                data = await getProducts();
 
             }
 
-        };
+            console.log("products =", data);
 
-        fetchProducts();
+            setProducts(data);
 
-    }, []);
+        } catch (err) {
+
+            console.log("API ERROR:", err);
+
+        } finally {
+
+            setLoading(false);
+
+        }
+
+    };
+
+    fetchProducts();
+
+}, [search]);
 
     return (
         <div className="min-h-screen bg-gray-50">

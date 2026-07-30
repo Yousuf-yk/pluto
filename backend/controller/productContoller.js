@@ -3,8 +3,11 @@ import {
     getProductById,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    searchProductsModel
 } from "../models/productModel.js";
+
+
 
 // GET ALL
 export const getProducts = async (req, res) => {
@@ -79,5 +82,30 @@ export const removeProduct = async (req, res) => {
 
     } catch (err) {
         res.status(500).json({ message: err.message });
+    }
+};
+
+
+
+export const searchProducts = async (req, res) => {
+    try {
+        const { q } = req.query;
+
+        if (!q) {
+            return res.json([]);
+        }
+
+        const products = await searchProductsModel(q);
+
+        res.json(products);
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+            message: "Server Error"
+        });
+
     }
 };
