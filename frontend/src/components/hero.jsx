@@ -3,79 +3,68 @@ import { Link } from "react-router-dom";
 import shoeLogo from "../assets/shoe.png";
 
 const Hero = () => {
-    return (
-        <section className="relative overflow-hidden bg-gradient-to-r from-rose-700 via-red-700 to-pink-600 text-white">
+return ( <section className="relative overflow-hidden bg-gradient-to-r from-[#870000] to-[#190A05] text-white">
+{/* Background glow */} <div className="absolute -top-20 -left-20 h-72 w-72 rounded-full bg-[#ff5a5f] opacity-20 blur-3xl"></div> <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-[#f4c430] opacity-10 blur-3xl"></div>
 
-            {/* Background Blur */}
-            <div className="absolute -top-20 -left-20 w-72 h-72 bg-pink-400 rounded-full blur-3xl opacity-30"></div>
-            <div className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-400 rounded-full blur-3xl opacity-30"></div>
 
-            <div className="relative max-w-7xl mx-auto px-6 py-28">
+  <div className="relative mx-auto flex min-h-[78vh] max-w-[var(--container)] items-center px-4 pb-16 pt-28 sm:px-6 lg:min-h-[88vh] lg:pb-20 lg:pt-32">
+    <div className="grid w-full grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      {/* Content */}
+      <div className="text-center lg:text-left">
+        <span className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold tracking-wide text-white/90 backdrop-blur-sm sm:text-sm">
+          New Collection 2026
+        </span>
 
-                <div className="grid lg:grid-cols-2 items-center gap-14">
+        <h1 className="mt-5 text-4xl font-black leading-tight sm:text-5xl md:text-6xl lg:text-7xl">
+          Premium Sneakers
+          <span className="block bg-gradient-to-r from-[#F4D35E] via-[#FFD166] to-[#F4D35E] bg-clip-text text-transparent">
+            Built for Every Step
+          </span>
+        </h1>
 
-                    {/* Left */}
+        <p className="mx-auto mt-5 max-w-xl text-base leading-7 text-white/80 sm:text-lg sm:leading-8 lg:mx-0">
+          Discover Nike, Adidas, Puma, New Balance, and more. Shop the
+          latest sneaker collection with premium quality, secure checkout,
+          and fast delivery.
+        </p>
 
-                    <div>
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start">
+          <Link
+            to="/"
+            className="inline-flex items-center justify-center gap-2 rounded-[var(--radius-lg)] bg-[#C1121F] px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-[#A60F1A] hover:shadow-red-900/30 sm:px-8 sm:py-4 sm:text-base"
+          >
+            <ShoppingBag size={18} />
+            Shop now
+          </Link>
 
-                        <span className="inline-block bg-white/20 px-5 py-2 rounded-full text-sm font-semibold mb-6">
-                             New Collection 2026
-                        </span>
+          <Link
+            to="/cart"
+            className="inline-flex items-center justify-center gap-2 rounded-[var(--radius-lg)] border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white hover:text-[#190A05] sm:px-8 sm:py-4 sm:text-base"
+          >
+            View cart
+            <ArrowRight size={18} />
+          </Link>
+        </div>
+      </div>
 
-                        <h1 className="text-5xl md:text-7xl font-black leading-tight">
-                            Shop
-                            <span className="text-yellow-400">
-                                {" "}Smarter
-                            </span>
-                            <br />
-                            Live Better.
-                        </h1>
+      {/* Image */}
+      <div className="flex justify-center lg:justify-end">
+        <div className="relative">
+          <div className="absolute inset-0 rounded-[var(--radius-2xl)] bg-[#C1121F] opacity-30 blur-3xl"></div>
 
-                        <p className="mt-8 text-lg text-gray-100 max-w-lg leading-8">
-                            Discover premium fashion, electronics, accessories
-                            and lifestyle products at unbeatable prices.
-                        </p>
+          <img
+            src={shoeLogo}
+            alt="Pluto sneakers collection"
+            className="relative w-64 rounded-[var(--radius-2xl)] border border-white/10 bg-white/5 object-contain p-4 shadow-2xl backdrop-blur-sm sm:w-80 md:w-96 lg:w-[500px]"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-                        <div className="flex flex-wrap gap-5 mt-10">
 
-                            <Link
-                                to="/"
-                                className="flex items-center gap-2 bg-white text-indigo-700 px-8 py-4 rounded-xl font-bold hover:scale-105 duration-300"
-                            >
-                                <ShoppingBag size={20} />
-                                Shop Now
-                            </Link>
-
-                            <Link
-                                to="/cart"
-                                className="flex items-center gap-2 border border-white px-8 py-4 rounded-xl hover:bg-white hover:text-indigo-700 duration-300"
-                            >
-                                View Cart
-                                <ArrowRight size={20} />
-                            </Link>
-
-                        </div>
-
-                    </div>
-
-                    {/* Right */}
-
-                    <div className="hidden lg:flex justify-center">
-
-                        <img
-                            src={shoeLogo}
-                            alt="Shopping"
-                            className="rounded-3xl shadow-2xl w-[500px] h-[500px] object-cover border-8 border-white/20"
-                        />
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-    );
+);
 };
 
 export default Hero;

@@ -4,169 +4,130 @@ import { User, Mail, Lock, UserPlus } from "lucide-react";
 import { register } from "../services/authApi";
 
 const Register = () => {
+const navigate = useNavigate();
 
-    const navigate = useNavigate();
+const [formData, setFormData] = useState({
+name: "",
+email: "",
+password: ""
+});
 
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        password: ""
-    });
+const [loading, setLoading] = useState(false);
 
-    const [loading, setLoading] = useState(false);
+const handleChange = (e) => {
+setFormData({
+...formData,
+[e.target.name]: e.target.value
+});
+};
 
-    const handleChange = (e) => {
+const handleSubmit = async (e) => {
+e.preventDefault();
 
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
 
-    };
+try {
+  setLoading(true);
 
-    const handleSubmit = async (e) => {
+  await register(formData);
 
-        e.preventDefault();
+  alert("Registration successful");
 
-        try {
+  navigate("/login");
+} catch (err) {
+  alert(err.response?.data?.message || err.message);
+} finally {
+  setLoading(false);
+}
 
-            setLoading(true);
 
-            await register(formData);
+};
 
-            alert("Registration Successful");
+return ( <div className="flex min-h-screen items-center justify-center bg-[var(--color-background)] px-4 py-8"> <div className="w-full max-w-md rounded-[var(--radius-2xl)] border bg-[var(--color-surface)] p-8 shadow-[var(--shadow-xl)] border-[var(--color-border)] sm:p-10"> <div className="mb-8 text-center"> <h1 className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-4xl font-black text-transparent">
+Pluto. </h1>
 
-            navigate("/login");
 
-        } catch (err) {
+      <p className="mt-3 text-[var(--color-text-muted)]">
+        Create your account and start shopping.
+      </p>
+    </div>
 
-            alert(err.response?.data?.message || err.message);
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div className="relative">
+        <User
+          size={20}
+          className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)]"
+        />
 
-        } finally {
+        <input
+          type="text"
+          name="name"
+          placeholder="Full name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+          className="w-full rounded-[var(--radius-lg)] border bg-[var(--color-surface)] py-3 pl-12 pr-4 text-[var(--color-text)] outline-none transition placeholder:text-[var(--color-text-muted)] border-[var(--color-border)] focus:border-[var(--color-primary)] focus:ring-4 focus:ring-[var(--color-primary-soft)]"
+        />
+      </div>
 
-            setLoading(false);
+      <div className="relative">
+        <Mail
+          size={20}
+          className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)]"
+        />
 
-        }
+        <input
+          type="email"
+          name="email"
+          placeholder="Email address"
+          value={formData.email}
+          onChange={handleChange}
+          required
+          className="w-full rounded-[var(--radius-lg)] border bg-[var(--color-surface)] py-3 pl-12 pr-4 text-[var(--color-text)] outline-none transition placeholder:text-[var(--color-text-muted)] border-[var(--color-border)] focus:border-[var(--color-primary)] focus:ring-4 focus:ring-[var(--color-primary-soft)]"
+        />
+      </div>
 
-    };
+      <div className="relative">
+        <Lock
+          size={20}
+          className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)]"
+        />
 
-    return (
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+          className="w-full rounded-[var(--radius-lg)] border bg-[var(--color-surface)] py-3 pl-12 pr-4 text-[var(--color-text)] outline-none transition placeholder:text-[var(--color-text-muted)] border-[var(--color-border)] focus:border-[var(--color-primary)] focus:ring-4 focus:ring-[var(--color-primary-soft)]"
+        />
+      </div>
 
-        <div className="min-h-screen bg-gradient-to-br from-indigo-700 via-purple-700 to-pink-600 flex items-center justify-center px-5">
+      <button
+        type="submit"
+        disabled={loading}
+        className="flex w-full items-center justify-center gap-2 rounded-[var(--radius-lg)] bg-[var(--color-primary)] py-3 font-semibold text-white transition hover:bg-[var(--color-primary-hover)] disabled:opacity-60"
+      >
+        <UserPlus size={18} />
 
-            <div className="w-full max-w-md bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl p-10">
+        {loading ? "Creating account..." : "Create account"}
+      </button>
+    </form>
 
-                <div className="text-center mb-8">
+    <div className="mt-6 text-center text-sm text-[var(--color-text-secondary)]">
+      Already have an account?{" "}
+      <Link
+        to="/login"
+        className="font-semibold text-[var(--color-primary)] transition hover:opacity-80"
+      >
+        Sign in
+      </Link>
+    </div>
+  </div>
+</div>
 
-                    <h1 className="text-4xl font-black text-indigo-700">
-                        Pluto
-                    </h1>
 
-                    <p className="text-gray-500 mt-2">
-                        Create your account 🚀
-                    </p>
-
-                </div>
-
-                <form
-                    onSubmit={handleSubmit}
-                    className="space-y-5"
-                >
-
-                    <div className="relative">
-
-                        <User
-                            size={20}
-                            className="absolute left-4 top-4 text-gray-400"
-                        />
-
-                        <input
-                            type="text"
-                            name="name"
-                            placeholder="Full Name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            required
-                            className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-200 outline-none"
-                        />
-
-                    </div>
-
-                    <div className="relative">
-
-                        <Mail
-                            size={20}
-                            className="absolute left-4 top-4 text-gray-400"
-                        />
-
-                        <input
-                            type="email"
-                            name="email"
-                            placeholder="Email Address"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                            className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-200 outline-none"
-                        />
-
-                    </div>
-
-                    <div className="relative">
-
-                        <Lock
-                            size={20}
-                            className="absolute left-4 top-4 text-gray-400"
-                        />
-
-                        <input
-                            type="password"
-                            name="password"
-                            placeholder="Password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                            className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-200 outline-none"
-                        />
-
-                    </div>
-
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl flex justify-center items-center gap-2 transition"
-                    >
-
-                        <UserPlus size={20} />
-
-                        {loading ? "Creating Account..." : "Register"}
-
-                    </button>
-
-                </form>
-
-                <div className="text-center mt-6">
-
-                    <p className="text-gray-600">
-
-                        Already have an account?
-
-                        <Link
-                            to="/login"
-                            className="text-indigo-600 font-semibold ml-2 hover:underline"
-                        >
-                            Login
-                        </Link>
-
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    );
-
+);
 };
 
 export default Register;

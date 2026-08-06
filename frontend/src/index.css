@@ -1,8 +1,72 @@
 @import "tailwindcss";
 
+:root {
+  /* =========================
+     Background (60%) - Clean luxury white
+     ========================= */
+  --color-background: #FFF9F8;
+  --color-background-secondary: #FFF1EF;
 
-/* * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-} */
+  /* =========================
+     Surfaces (30%) - Soft white
+     ========================= */
+  --color-surface: #FFFFFF;
+  --color-surface-secondary: #FFF7F5;
+  --color-border: #F1D9D5;
+
+  /* =========================
+     Text
+     ========================= */
+  --color-text: #1F1718;
+   --color-background: linear-gradient(to right, #870000, #190A05);
+  --color-text-secondary: #5E4749;
+  --color-text-muted: #9B7E80;
+
+  /* =========================
+     Primary (10%) - Premium ruby red
+     ========================= */
+  --color-primary: #C1121F;
+  --color-primary-hover: #A60F1A;
+  --color-primary-soft: #FCE8EA;
+
+  /* =========================
+     Accent - Rose gold
+     ========================= */
+  --color-accent: #E07A5F;
+  --color-accent-hover: #C9644A;
+  --color-accent-soft: #FDEEEA;
+
+  /* =========================
+     Price / highlight
+     ========================= */
+  --color-price: #D62828;
+  --color-price-hover: #B71C1C;
+
+  /* =========================
+     Status
+     ========================= */
+  --color-success: #2E8B57;
+  --color-warning: #D89B1D;
+  --color-danger: #D62828;
+
+  /* =========================
+     Shadows
+     ========================= */
+  --shadow-sm: 0 2px 8px rgba(193, 18, 31, 0.04);
+  --shadow-md: 0 10px 24px rgba(193, 18, 31, 0.08);
+  --shadow-lg: 0 20px 40px rgba(193, 18, 31, 0.12);
+  --shadow-xl: 0 32px 64px rgba(193, 18, 31, 0.16);
+
+  /* =========================
+     Radius
+     ========================= */
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 26px;
+  --radius-2xl: 34px;
+
+  /* =========================
+     Layout
+     ========================= */
+  --container: 1280px;
+}

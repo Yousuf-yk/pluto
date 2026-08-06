@@ -6,212 +6,162 @@ import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 
 import {
-    getWishlist,
-    removeWishlist
+getWishlist,
+removeWishlist
 } from "../services/wishlistApi";
 
 import { addToCart } from "../services/cartApi";
 
 const Wishlist = () => {
+const [wishlist, setWishlist] = useState([]);
+const [loading, setLoading] = useState(true);
 
-    const [wishlist, setWishlist] = useState([]);
-    const [loading, setLoading] = useState(true);
+const fetchWishlist = async () => {
+try {
+const data = await getWishlist();
+setWishlist(data);
+} catch (err) {
+console.log(err);
+} finally {
+setLoading(false);
+}
+};
 
-    const fetchWishlist = async () => {
+useEffect(() => {
+fetchWishlist();
+}, []);
 
-        try {
+const handleRemove = async (id) => {
+try {
+await removeWishlist(id);
 
-            const data = await getWishlist();
 
-            setWishlist(data);
+  setWishlist((prev) =>
+    prev.filter((item) => item.id !== id)
+  );
+} catch (err) {
+  console.log(err);
+}
 
-        } catch (err) {
 
-            console.log(err);
+};
 
-        } finally {
+const handleAddToCart = async (productId) => {
+try {
+const res = await addToCart(productId);
+alert(res.message);
+} catch (err) {
+alert(err.response?.data?.message || err.message);
+}
+};
 
-            setLoading(false);
+if (loading) {
+return ( <div className="flex min-h-screen items-center justify-center bg-[var(--color-background)]"> <div className="h-14 w-14 animate-spin rounded-full border-4 border-[var(--color-primary)] border-t-transparent"></div> </div>
+);
+}
 
-        }
+return (
+<> <Navbar />
 
-    };
 
-    useEffect(() => {
+  <div className="min-h-screen bg-[var(--color-background)] pt-28 pb-16">
+    <div className="mx-auto max-w-[var(--container)] px-4 sm:px-6">
+      <div className="mb-10">
+        <h1 className="text-4xl font-black text-[var(--color-text)] sm:text-5xl">
+          My Wishlist
+        </h1>
 
-        fetchWishlist();
+        <p className="mt-2 text-[var(--color-text-muted)]">
+          {wishlist.length} Saved Products
+        </p>
+      </div>
 
-    }, []);
+      {wishlist.length === 0 ? (
+        <div className="rounded-[var(--radius-xl)] border bg-[var(--color-surface)] py-16 text-center shadow-[var(--shadow-lg)] border-[var(--color-border)] sm:py-24">
+          <Heart
+            size={72}
+            className="mx-auto mb-6 text-[var(--color-accent)]"
+          />
 
-    const handleRemove = async (id) => {
+          <h2 className="text-2xl font-bold text-[var(--color-text)] sm:text-3xl">
+            Wishlist is empty
+          </h2>
 
-        try {
+          <p className="mt-3 text-[var(--color-text-muted)]">
+            Save products by clicking the heart button on any sneaker.
+          </p>
 
-            await removeWishlist(id);
+          <Link
+            to="/"
+            className="mt-8 inline-flex rounded-[var(--radius-lg)] bg-[var(--color-primary)] px-6 py-3 font-semibold text-white transition hover:bg-[var(--color-primary-hover)]"
+          >
+            Continue shopping
+          </Link>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {wishlist.map((item) => (
+            <div
+              key={item.id}
+              className="group overflow-hidden rounded-[var(--radius-xl)] border bg-[var(--color-surface)] shadow-[var(--shadow-md)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-xl)] border-[var(--color-border)]"
+            >
+              <div className="relative aspect-square overflow-hidden">
+                <img
+                  src={`http://localhost:3000/uploads/${item.image_url}`}
+                  alt={item.name}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
 
-            setWishlist((prev) =>
-                prev.filter((item) => item.id !== id)
-            );
+                <button
+                  onClick={() => handleRemove(item.id)}
+                  className="absolute right-3 top-3 rounded-full p-2 shadow-[var(--shadow-sm)] transition bg-[var(--color-surface)] hover:bg-[var(--color-accent-soft)]"
+                >
+                  <Trash2
+                    size={18}
+                    className="text-[var(--color-accent)]"
+                  />
+                </button>
+              </div>
 
-        } catch (err) {
+              <div className="p-5">
+                <p className="text-sm font-semibold text-[var(--color-primary)]">
+                  {item.category}
+                </p>
 
-            console.log(err);
+                <h2 className="mt-2 line-clamp-1 text-xl font-bold text-[var(--color-text)]">
+                  {item.name}
+                </h2>
 
-        }
+                <p className="mt-3 line-clamp-2 text-sm text-[var(--color-text-muted)]">
+                  {item.description}
+                </p>
 
-    };
+                <p className="mt-5 text-3xl font-black text-[var(--color-accent)]">
+                  ₹{item.price}
+                </p>
 
-    const handleAddToCart = async (productId) => {
-
-        try {
-
-            const res = await addToCart(productId);
-
-            alert(res.message);
-
-        } catch (err) {
-
-            alert(err.response?.data?.message || err.message);
-
-        }
-
-    };
-
-    if (loading) {
-
-        return (
-            <div className="min-h-screen flex justify-center items-center">
-                <div className="w-14 h-14 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+                <button
+                  onClick={() =>
+                    handleAddToCart(item.product_id)
+                  }
+                  className="mt-6 flex w-full items-center justify-center gap-2 rounded-[var(--radius-lg)] bg-[var(--color-primary)] py-3 font-semibold text-white transition hover:bg-[var(--color-primary-hover)]"
+                >
+                  <ShoppingCart size={18} />
+                  Add to Cart
+                </button>
+              </div>
             </div>
-        );
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
 
-    }
+  <Footer />
+</>
 
-    return (
 
-        <>
-            <Navbar />
-
-            <div className="min-h-screen bg-gray-100 pt-28 pb-16">
-
-                <div className="max-w-7xl mx-auto px-6">
-
-                    <div className="mb-10">
-
-                        <h1 className="text-5xl font-black">
-                            My Wishlist ❤️
-                        </h1>
-
-                        <p className="text-gray-500 mt-2">
-                            {wishlist.length} Saved Products
-                        </p>
-
-                    </div>
-
-                    {wishlist.length === 0 ? (
-
-                        <div className="bg-white rounded-3xl shadow-lg py-24 text-center">
-
-                            <Heart
-                                size={80}
-                                className="mx-auto text-red-400 mb-6"
-                            />
-
-                            <h2 className="text-3xl font-bold">
-                                Wishlist is Empty
-                            </h2>
-
-                            <p className="text-gray-500 mt-4 mb-8">
-                                Save products by clicking the ❤️ button.
-                            </p>
-
-                            <Link
-                                to="/"
-                                className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl"
-                            >
-                                Continue Shopping
-                            </Link>
-
-                        </div>
-
-                    ) : (
-
-                        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-
-                            {wishlist.map((item) => (
-
-                                <div
-                                    key={item.id}
-                                    className="bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition duration-300"
-                                >
-
-                                    <div className="relative h-72 overflow-hidden">
-
-                                        <img
-                                            src={`http://localhost:3000/uploads/${item.image_url}`}
-                                            alt={item.name}
-                                            className="w-full h-full object-cover hover:scale-110 transition duration-500"
-                                        />
-
-                                        <button
-                                            onClick={() => handleRemove(item.id)}
-                                            className="absolute top-4 right-4 bg-white p-3 rounded-full shadow hover:bg-red-100"
-                                        >
-                                            <Trash2
-                                                size={18}
-                                                className="text-red-500"
-                                            />
-                                        </button>
-
-                                    </div>
-
-                                    <div className="p-6">
-
-                                        <p className="text-sm text-indigo-600 font-semibold">
-                                            {item.category}
-                                        </p>
-
-                                        <h2 className="text-2xl font-bold mt-2">
-                                            {item.name}
-                                        </h2>
-
-                                        <p className="text-gray-500 mt-3 line-clamp-2">
-                                            {item.description}
-                                        </p>
-
-                                        <p className="text-3xl font-black text-indigo-600 mt-5">
-                                            ₹{item.price}
-                                        </p>
-
-                                        <button
-                                            onClick={() =>
-                                                handleAddToCart(item.product_id)
-                                            }
-                                            className="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl flex justify-center items-center gap-2"
-                                        >
-                                            <ShoppingCart size={18} />
-                                            Add to Cart
-                                        </button>
-
-                                    </div>
-
-                                </div>
-
-                            ))}
-
-                        </div>
-
-                    )}
-
-                </div>
-
-            </div>
-
-            <Footer />
-        </>
-
-    );
-
+);
 };
 
 export default Wishlist;

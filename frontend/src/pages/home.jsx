@@ -1,164 +1,123 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import Navbar from "../components/navbar";
 import Hero from "../components/hero";
 import Footer from "../components/footer";
 import Card from "../components/card";
-
 import { getProducts, searchProducts } from "../services/productApi";
-import { useSearchParams } from "react-router-dom";
-
 
 const Home = () => {
+const [products, setProducts] = useState([]);
+const [loading, setLoading] = useState(true);
 
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
+const [searchParams] = useSearchParams();
+const search = searchParams.get("search");
 
-    const [searchParams] = useSearchParams();
-    const search = searchParams.get("search");
+useEffect(() => {
+const fetchProducts = async () => {
+try {
+const data = search
+? await searchProducts(search)
+: await getProducts();
 
-    useEffect(() => {
 
-    const fetchProducts = async () => {
+    setProducts(data);
+  } catch (err) {
+    console.log("API ERROR:", err);
+  } finally {
+    setLoading(false);
+  }
+};
 
-        try {
+fetchProducts();
 
-            console.log("search =", search);
-
-            let data;
-
-            if (search) {
-
-                data = await searchProducts(search);
-
-            } else {
-
-                data = await getProducts();
-
-            }
-
-            console.log("products =", data);
-
-            setProducts(data);
-
-        } catch (err) {
-
-            console.log("API ERROR:", err);
-
-        } finally {
-
-            setLoading(false);
-
-        }
-
-    };
-
-    fetchProducts();
 
 }, [search]);
 
-    return (
-        <div className="min-h-screen bg-gray-50">
+return ( <div className="min-h-screen bg-[var(--color-background)]"> <Navbar /> <Hero />
 
-            <Navbar />
 
-            <Hero />
-            <section className="max-w-7xl mx-auto px-6 py-12">
+  {/* Features section */}
+  <section className="mx-auto max-w-[var(--container)] px-4 py-8 sm:px-6 sm:py-12 lg:py-14">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+      <div className="rounded-[var(--radius-xl)] border bg-[var(--color-surface)] p-5 text-center shadow-[var(--shadow-md)] transition hover:shadow-[var(--shadow-lg)] sm:p-6">
+        <h2 className="text-lg font-bold text-[var(--color-text)] sm:text-xl">
+          Free Shipping
+        </h2>
+        <p className="mt-2 text-sm text-[var(--color-text-muted)]">
+          Free delivery on all orders above ₹999.
+        </p>
+      </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="rounded-[var(--radius-xl)] border bg-[var(--color-surface)] p-5 text-center shadow-[var(--shadow-md)] transition hover:shadow-[var(--shadow-lg)] sm:p-6">
+        <h2 className="text-lg font-bold text-[var(--color-text)] sm:text-xl">
+          Secure Payment
+        </h2>
+        <p className="mt-2 text-sm text-[var(--color-text-muted)]">
+          100% safe and encrypted checkout.
+        </p>
+      </div>
 
-                    <div className="bg-white rounded-2xl shadow-md p-8 text-center hover:shadow-xl transition">
-                        <h2 className="text-2xl font-bold mb-2">Free Shipping</h2>
-                        <p className="text-gray-500">
-                            Free delivery on all orders above ₹999.
-                        </p>
-                    </div>
+      <div className="rounded-[var(--radius-xl)] border bg-[var(--color-surface)] p-5 text-center shadow-[var(--shadow-md)] transition hover:shadow-[var(--shadow-lg)] sm:p-6 sm:col-span-2 lg:col-span-1">
+        <h2 className="text-lg font-bold text-[var(--color-text)] sm:text-xl">
+          Premium Quality
+        </h2>
+        <p className="mt-2 text-sm text-[var(--color-text-muted)]">
+          Carefully selected sneakers at the best prices.
+        </p>
+      </div>
+    </div>
+  </section>
 
-                    <div className="bg-white rounded-2xl shadow-md p-8 text-center hover:shadow-xl transition">
-                        <h2 className="text-2xl font-bold mb-2"> Secure Payment</h2>
-                        <p className="text-gray-500">
-                            100% safe and encrypted checkout.
-                        </p>
-                    </div>
+  {/* Products section */}
+  <section className="mx-auto max-w-[var(--container)] px-4 pb-12 sm:px-6 sm:pb-16">
+    <div className="mb-6 flex flex-col gap-3 sm:mb-8 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h1 className="text-2xl font-black text-[var(--color-text)] sm:text-3xl lg:text-4xl">
+          Featured Products
+        </h1>
 
-                    <div className="bg-white rounded-2xl shadow-md p-8 text-center hover:shadow-xl transition">
-                        <h2 className="text-2xl font-bold mb-2">Premium Quality</h2>
-                        <p className="text-gray-500">
-                            Carefully selected products at the best prices.
-                        </p>
-                    </div>
+        <p className="mt-1 text-sm text-[var(--color-text-muted)]">
+          {search
+            ? `Search results for “${search}”`
+            : "Discover our latest sneaker collection."}
+        </p>
+      </div>
 
-                </div>
+      <span className="inline-flex w-fit rounded-full bg-[var(--color-primary-soft)] px-4 py-2 text-sm font-semibold text-[var(--color-primary)]">
+        {products.length} Products
+      </span>
+    </div>
 
-            </section>
+    {loading ? (
+      <div className="flex h-40 items-center justify-center sm:h-52">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-[var(--color-primary)] border-t-transparent sm:h-12 sm:w-12"></div>
+      </div>
+    ) : products.length === 0 ? (
+      <div className="rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-[var(--color-surface)] py-16 text-center shadow-[var(--shadow-md)]">
+        <h2 className="text-2xl font-bold text-[var(--color-text)]">
+          No products found
+        </h2>
 
-            <section className="max-w-7xl mx-auto px-6 py-16">
+        <p className="mt-3 text-sm text-[var(--color-text-muted)]">
+          Try searching for a different sneaker.
+        </p>
+      </div>
+    ) : (
+      <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
+        {products.map((product) => (
+          <Card key={product.id} product={product} />
+        ))}
+      </div>
+    )}
+  </section>
 
-                <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-10">
+  <Footer />
+</div>
 
-                    <div>
-                        <h1 className="text-4xl font-bold text-gray-900">
-                            Featured Products
-                        </h1>
 
-                        <p className="text-gray-500 mt-2">
-                            Discover our latest collection.
-                        </p>
-                    </div>
-
-                    <div className="mt-4 md:mt-0">
-                        <span className="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-semibold">
-                            {products.length} Products
-                        </span>
-                    </div>
-
-                </div>
-
-                {loading ? (
-
-                    <div className="flex justify-center items-center h-60">
-
-                        <div className="w-14 h-14 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
-
-                    </div>
-
-                ) : products.length === 0 ? (
-
-                    <div className="text-center py-24">
-
-                        <h2 className="text-3xl font-bold">
-                            No Products Found
-                        </h2>
-
-                        <p className="text-gray-500 mt-3">
-                            Please check back later.
-                        </p>
-
-                    </div>
-
-                ) : (
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-
-                        {products.map((product) => (
-
-                            <Card
-                                key={product.id}
-                                product={product}
-                            />
-
-                        ))}
-
-                    </div>
-
-                )}
-
-            </section>
-
-            <Footer />
-
-        </div>
-    );
+);
 };
 
 export default Home;

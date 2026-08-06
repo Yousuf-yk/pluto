@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import {
-  Heart,
-  ShoppingCart,
-  User,
-  Menu,
-  X,
-  Search,
-  LogOut
+Heart,
+ShoppingCart,
+User,
+Menu,
+X,
+Search,
+LogOut
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -14,253 +14,223 @@ import { getCart } from "../services/cartApi";
 import { getWishlist } from "../services/wishlistApi";
 
 function Navbar() {
-
-  const [isOpen, setIsOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
-  const [wishlistCount, setWishlistCount] = useState(0);
-
-  const [search, setSearch] = useState("");
-  const navigate = useNavigate();
-
-
-  const token = localStorage.getItem("token");
-
-  useEffect(() => {
-
-    if (!token) return;
-
-    const loadData = async () => {
-
-      try {
-
-        const cart = await getCart();
-        const wishlist = await getWishlist();
-
-        setCartCount(cart.length);
-        setWishlistCount(wishlist.length);
-
-      } catch (err) {
-
-        console.log(err);
-
-      }
-
-    };
-
-    loadData();
-
-  }, []);
-
-  const logout = () => {
-
-    localStorage.removeItem("token");
-
-    navigate("/login");
-
-  };
-
-  const handleSearch = (e) => {
-
-    if (e.key === "Enter") {
-
-      navigate(`/?search=${search}`);
-
-    }
-
-  };
-
-  return (
-
-    <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-[96%] lg:w-[85%] z-50">
-
-      <div className="h-16 rounded-full bg-white/70 backdrop-blur-2xl border border-white shadow-xl px-7 flex justify-between items-center">
-
-        {/* Logo */}
-
-        <Link
-          to="/"
-          className="text-3xl font-black  text-gray-700"
-        >
-          Pluto.
-        </Link>
-
-        {/* Desktop */}
-
-        <div className="hidden md:flex items-center gap-8 text-gray-700 font-medium">
-
-          {/* <Link to="/" className="hover:text-rose-600">
-            Home
-          </Link>
-
-          <Link to="/" className="hover:text-rose-600">
-            Shop
-          </Link> */}
-
-        </div>
-
-        {/* Right */}
-
-        <div className="hidden md:flex items-center gap-3">
-
-          <div className="hidden lg:flex items-center bg-gray-100 rounded-full px-3 py-2">
-
-            <Search size={18} className="text-gray-500 mr-2" />
-
-            <input
-              type="text"
-              placeholder="Search shoes..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              onKeyDown={handleSearch}
-              className="bg-transparent outline-none text-sm w-40"
-            />
-
-          </div>
-
-          <Link
-            to="/wishlist"
-            className="relative w-10 h-10 rounded-full hover:bg-pink-100 flex justify-center items-center"
-          >
-
-            <Heart size={20}/>
-
-            {wishlistCount > 0 && (
-
-              <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-pink-500 text-white text-xs flex justify-center items-center">
-
-                {wishlistCount}
-
-              </span>
-
-            )}
-
-          </Link>
-
-          <Link
-            to="/cart"
-            className="relative w-10 h-10 rounded-full hover:bg-indigo-100 flex justify-center items-center"
-          >
-
-            <ShoppingCart size={20}/>
-
-            {cartCount > 0 && (
-
-              <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-indigo-600 text-white text-xs flex justify-center items-center">
-
-                {cartCount}
-
-              </span>
-
-            )}
-
-          </Link>
-
-          {token ? (
-
-            <button
-              onClick={logout}
-              className="w-10 h-10 rounded-full hover:bg-red-100 flex justify-center items-center"
-            >
-
-              <LogOut size={20}/>
-
-            </button>
-
-          ) : (
-
-            <Link
-              to="/login"
-              className="w-10 h-10 rounded-full hover:bg-indigo-100 flex justify-center items-center"
-            >
-
-              <User size={20}/>
-
-            </Link>
-
-          )}
-
-        </div>
-
-        {/* Mobile */}
-
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden"
-        >
-
-          {isOpen ? <X size={28}/> : <Menu size={28}/>}
-
-        </button>
-
+const [isOpen, setIsOpen] = useState(false);
+const [showSearch, setShowSearch] = useState(false);
+const [cartCount, setCartCount] = useState(0);
+const [wishlistCount, setWishlistCount] = useState(0);
+const [search, setSearch] = useState("");
+
+const navigate = useNavigate();
+const token = localStorage.getItem("token");
+
+useEffect(() => {
+if (!token) return;
+
+
+const loadData = async () => {
+  try {
+    const cart = await getCart();
+    const wishlist = await getWishlist();
+
+    setCartCount(cart.length);
+    setWishlistCount(wishlist.length);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+loadData();
+
+
+}, [token]);
+
+const logout = () => {
+localStorage.removeItem("token");
+navigate("/login");
+};
+
+const handleSearch = (e) => {
+if (e.key === "Enter" && search.trim()) {
+navigate(`/?search=${search}`);
+setIsOpen(false);
+setShowSearch(false);
+}
+};
+
+return ( <nav className="fixed top-4 left-1/2 z-50 w-[95%] -translate-x-1/2 lg:w-[85%]">
+{/* Navbar */} <div className="flex h-16 items-center justify-between rounded-full border border-white/40 bg-white/80 px-5 shadow-[var(--shadow-lg)] backdrop-blur-xl sm:px-6">
+{/* Logo */} <Link
+       to="/"
+       className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-2xl font-black text-transparent sm:text-3xl"
+     >
+Pluto. </Link>
+
+
+    {/* Desktop search */}
+    <div className="hidden flex-1 justify-center px-8 md:flex">
+      <div className="flex w-full max-w-md items-center rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2">
+        <Search
+          size={18}
+          className="mr-2 text-[var(--color-text-muted)]"
+        />
+        <input
+          type="text"
+          placeholder="Search sneakers..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={handleSearch}
+          className="w-full bg-transparent text-sm text-[var(--color-text)] outline-none placeholder:text-[var(--color-text-muted)]"
+        />
       </div>
+    </div>
 
-      {isOpen && (
+    {/* Desktop actions */}
+    <div className="hidden items-center gap-2 md:flex">
+      <Link
+        to="/wishlist"
+        className="relative flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-[var(--color-accent-soft)]"
+      >
+        <Heart size={20} className="text-[var(--color-text)]" />
+        {wishlistCount > 0 && (
+          <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[10px] font-semibold text-white">
+            {wishlistCount}
+          </span>
+        )}
+      </Link>
 
-        <div className="mt-3 rounded-3xl bg-white shadow-xl overflow-hidden md:hidden">
+      <Link
+        to="/cart"
+        className="relative flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-[var(--color-primary-soft)]"
+      >
+        <ShoppingCart size={20} className="text-[var(--color-text)]" />
+        {cartCount > 0 && (
+          <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--color-primary)] text-[10px] font-semibold text-white">
+            {cartCount}
+          </span>
+        )}
+      </Link>
 
-          <Link
-            to="/"
-            onClick={() => setIsOpen(false)}
-            className="block px-6 py-4 hover:bg-gray-100"
-          >
-            Home
-          </Link>
-
-          <Link
-            to="/wishlist"
-            onClick={() => setIsOpen(false)}
-            className="flex justify-between px-6 py-4 hover:bg-gray-100"
-          >
-            <span>Wishlist</span>
-
-            <span>{wishlistCount}</span>
-
-          </Link>
-
-          <Link
-            to="/cart"
-            onClick={() => setIsOpen(false)}
-            className="flex justify-between px-6 py-4 hover:bg-gray-100"
-          >
-            <span>Cart</span>
-
-            <span>{cartCount}</span>
-
-          </Link>
-
-          {token ? (
-
-            <button
-              onClick={logout}
-              className="w-full text-left px-6 py-4 hover:bg-red-100"
-            >
-
-              Logout
-
-            </button>
-
-          ) : (
-
-            <Link
-              to="/login"
-              onClick={() => setIsOpen(false)}
-              className="block px-6 py-4 hover:bg-gray-100"
-            >
-
-              👤 Login
-
-            </Link>
-
-          )}
-
-        </div>
-
+      {token ? (
+        <button
+          onClick={logout}
+          className="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-red-50"
+        >
+          <LogOut size={20} className="text-[var(--color-text)]" />
+        </button>
+      ) : (
+        <Link
+          to="/login"
+          className="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-[var(--color-primary-soft)]"
+        >
+          <User size={20} className="text-[var(--color-text)]" />
+        </Link>
       )}
+    </div>
 
-    </nav>
+    {/* Mobile actions */}
+    <div className="flex items-center gap-2 md:hidden">
+      <button
+        onClick={() => setShowSearch(!showSearch)}
+        className="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-[var(--color-surface-secondary)]"
+      >
+        <Search size={20} className="text-[var(--color-text)]" />
+      </button>
 
-  );
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-[var(--color-surface-secondary)]"
+      >
+        {isOpen ? (
+          <X size={24} className="text-[var(--color-text)]" />
+        ) : (
+          <Menu size={24} className="text-[var(--color-text)]" />
+        )}
+      </button>
+    </div>
+  </div>
 
+  {/* Mobile search dropdown */}
+  {showSearch && (
+    <div className="mx-auto mt-3 w-[85%] rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-[var(--color-surface)]/80 p-4 shadow-[var(--shadow-xl)] backdrop-blur-2xl md:hidden">
+      <div className="flex items-center rounded-full border border-[var(--color-border)] bg-[var(--color-surface-secondary)] px-4 py-2">
+        <Search
+          size={18}
+          className="mr-2 text-[var(--color-text-muted)]"
+        />
+        <input
+          type="text"
+          placeholder="Search sneakers..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={handleSearch}
+          className="w-full bg-transparent text-sm text-[var(--color-text)] outline-none placeholder:text-[var(--color-text-muted)]"
+        />
+      </div>
+    </div>
+  )}
+
+  {/* Mobile menu */}
+  {isOpen && (
+    <div className="ml-auto mt-3 w-[60%] justify-items-center overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--color-border)] bg-[var(--color-surface)]/75 shadow-[var(--shadow-xl)] backdrop-blur-2xl md:hidden">
+      <Link
+        to="/"
+        onClick={() => setIsOpen(false)}
+        className="block px-6 py-4 font-medium text-[var(--color-text)] transition hover:bg-[var(--color-surface-secondary)]"
+      >
+        Home
+      </Link>
+
+      <Link
+        to="/wishlist"
+        onClick={() => setIsOpen(false)}
+        className="flex items-center justify-between px-6 py-4 font-medium text-[var(--color-text)] transition hover:bg-[var(--color-surface-secondary)]"
+      >
+        <span>Wishlist</span>
+        {wishlistCount > 0 && (
+          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--color-accent)] text-xs font-semibold text-white">
+            {wishlistCount}
+          </span>
+        )}
+      </Link>
+
+      <Link
+        to="/cart"
+        onClick={() => setIsOpen(false)}
+        className="flex items-center justify-between px-6 py-4 font-medium text-[var(--color-text)] transition hover:bg-[var(--color-surface-secondary)]"
+      >
+        <span>Cart</span>
+        {cartCount > 0 && (
+          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--color-primary)] text-xs font-semibold text-white">
+            {cartCount}
+          </span>
+        )}
+      </Link>
+
+      {token ? (
+        <button
+          onClick={() => {
+            logout();
+            setIsOpen(false);
+          }}
+          className="w-full px-6 py-4 text-left font-medium text-[var(--color-text)] transition hover:bg-red-50"
+        >
+          Logout
+        </button>
+      ) : (
+        <Link
+          to="/login"
+          onClick={() => setIsOpen(false)}
+          className="block px-6 py-4 font-medium text-[var(--color-text)] transition hover:bg-[var(--color-surface-secondary)]"
+        >
+          Login
+        </Link>
+      )}
+    </div>
+  )}
+</nav>
+
+
+);
 }
 
 export default Navbar;
