@@ -1,20 +1,22 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
-
-// export default defineConfig({
-//   plugins: [react(), tailwindcss()],
-  
-// });
-
+import path from "path";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+
   server: {
-    host: 'localhost',
+    host: "localhost",
     port: 5173,
     watch: {
-      usePolling: true
-    }
-  }
+      usePolling: true,
+    },
+  },
 });

@@ -1,81 +1,54 @@
-import db from "../config/db.js";
+import pool from "../config/db.js";
 
-// GET ALL
+// Get all products
 export const getAllProducts = async () => {
-    const result = await db.query("SELECT * FROM products ORDER BY id ASC");
+    const result = await pool.query(
+        "SELECT * FROM products ORDER BY id DESC"
+    );
     return result.rows;
 };
 
-// GET ONE
+// Get product by ID
 export const getProductById = async (id) => {
-    const result = await db.query(
+    const result = await pool.query(
         "SELECT * FROM products WHERE id = $1",
         [id]
     );
-
     return result.rows[0];
 };
 
-// CREATE
-export const createProduct = async (product) => {
-    const { name, description, price, image_url, category, stock } = product;
-
-    const result = await db.query(
-        `INSERT INTO products
-        (name, description, price, image_url, category, stock)
-        VALUES ($1,$2,$3,$4,$5,$6)
-        RETURNING *`,
-        [name, description, price, image_url, category, stock]
-    );
-
-    return result.rows[0];
-};
-
-// UPDATE
-export const updateProduct = async (id, product) => {
-    const { name, description, price, image_url, category, stock } = product;
-
-    const result = await db.query(
+// Update product
+export const updateProduct = async (
+    id,
+    name,
+    description,
+    price,
+    category,
+    stock,
+    imageUrl
+) => {
+    const result = await pool.query(
         `UPDATE products
-        SET
-            name=$1,
-            description=$2,
-            price=$3,
-            image_url=$4,
-            category=$5,
-            stock=$6
-        WHERE id=$7
-        RETURNING *`,
-        [name, description, price, image_url, category, stock, id]
+     SET name = $1,
+         description = $2,
+         price = $3,
+         category = $4,
+         stock = $5,
+         image_url = $6
+     WHERE id = $7
+     RETURNING *`,
+        [name, description, price, category, stock, imageUrl, id]
     );
 
     return result.rows[0];
 };
 
-// DELETE
+// Delete product
 export const deleteProduct = async (id) => {
-    const result = await db.query(
-        "DELETE FROM products WHERE id=$1 RETURNING *",
+    const result = await pool.query(
+        "DELETE FROM products WHERE id = $1 RETURNING *",
         [id]
     );
 
     return result.rows[0];
-};
-
-
-export const searchProductsModel = async (search) => {
-    const result = await db.query(
-        `
-        SELECT *
-        FROM products
-        WHERE
-            name ILIKE $1 OR
-            description ILIKE $1 OR
-            category ILIKE $1
-        ORDER BY id ASC;
-        `,
-        [`%${search}%`]
-    );
-
-    return result.rows;
 };

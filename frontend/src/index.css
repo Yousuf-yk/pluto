@@ -1,61 +1,65 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+
+@custom-variant dark (&:is(.dark *));
 
 :root {
   /* =========================
-     Background (60%) - Clean luxury white
+     60% Background
      ========================= */
-  --color-background: #FFF9F8;
-  --color-background-secondary: #FFF1EF;
+  --color-background: #FAF7F3;
+  --color-background-secondary: #F5F0EA;
 
   /* =========================
-     Surfaces (30%) - Soft white
+     30% Surfaces
      ========================= */
   --color-surface: #FFFFFF;
-  --color-surface-secondary: #FFF7F5;
-  --color-border: #F1D9D5;
+  --color-surface-secondary: #FCF9F6;
+  --color-border: #E9DDD2;
 
   /* =========================
      Text
      ========================= */
-  --color-text: #1F1718;
-   --color-background: linear-gradient(to right, #870000, #190A05);
-  --color-text-secondary: #5E4749;
-  --color-text-muted: #9B7E80;
+  --color-text: #221B18;
+  --color-text-secondary: #5F534A;
+  --color-text-muted: #9A8B80;
 
   /* =========================
-     Primary (10%) - Premium ruby red
+     10% Primary (Luxury Red)
      ========================= */
-  --color-primary: #C1121F;
-  --color-primary-hover: #A60F1A;
-  --color-primary-soft: #FCE8EA;
+  --color-primary: #0f100f;
+  --color-primary-hover: #8E1826;
+  --color-primary-soft: #F7E6E8;
 
   /* =========================
-     Accent - Rose gold
+     Accent (Champagne Gold)
      ========================= */
-  --color-accent: #E07A5F;
-  --color-accent-hover: #C9644A;
-  --color-accent-soft: #FDEEEA;
+  --color-accent: #e32c2c;
+  --color-accent-hover: #AF9157;
+  --color-accent-soft: #F8F2E7;
 
   /* =========================
-     Price / highlight
+     Price
      ========================= */
-  --color-price: #D62828;
-  --color-price-hover: #B71C1C;
+  --color-price: #C1121F;
+  --color-price-hover: #A60F1A;
 
   /* =========================
      Status
      ========================= */
   --color-success: #2E8B57;
   --color-warning: #D89B1D;
-  --color-danger: #D62828;
+  --color-danger: #C1121F;
 
   /* =========================
      Shadows
      ========================= */
-  --shadow-sm: 0 2px 8px rgba(193, 18, 31, 0.04);
-  --shadow-md: 0 10px 24px rgba(193, 18, 31, 0.08);
-  --shadow-lg: 0 20px 40px rgba(193, 18, 31, 0.12);
-  --shadow-xl: 0 32px 64px rgba(193, 18, 31, 0.16);
+  --shadow-sm: 0 2px 8px rgba(34, 27, 24, 0.04);
+  --shadow-md: 0 10px 24px rgba(34, 27, 24, 0.08);
+  --shadow-lg: 0 20px 40px rgba(34, 27, 24, 0.12);
+  --shadow-xl: 0 32px 64px rgba(34, 27, 24, 0.16);
 
   /* =========================
      Radius
@@ -69,4 +73,134 @@
      Layout
      ========================= */
   --container: 1280px;
+
+  /* =========================
+     Shadcn Tokens
+     ========================= */
+  --background: #FAF7F3;
+  --foreground: #221B18;
+  --card: #FFFFFF;
+  --card-foreground: #221B18;
+  --popover: #FFFFFF;
+  --popover-foreground: #221B18;
+  --primary: #A61E2D;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F5F0EA;
+  --secondary-foreground: #221B18;
+  --muted: #F5F0EA;
+  --muted-foreground: #9A8B80;
+  --accent: #FCF9F6;
+  --accent-foreground: #221B18;
+  --destructive: #C1121F;
+  --border: #E9DDD2;
+  --input: #E9DDD2;
+  --ring: #A61E2D;
+
+  --chart-1: #A61E2D;
+  --chart-2: #C8A96A;
+  --chart-3: #D9B26F;
+  --chart-4: #E07A5F;
+  --chart-5: #8E1826;
+
+  --radius: 0.75rem;
+
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #221B18;
+  --sidebar-primary: #A61E2D;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #FCF9F6;
+  --sidebar-accent-foreground: #221B18;
+  --sidebar-border: #E9DDD2;
+  --sidebar-ring: #A61E2D;
+}
+
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: "Geist Variable", sans-serif;
+
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+.dark {
+  --background: #161212;
+  --foreground: #F8F5F1;
+  --card: #211B1B;
+  --card-foreground: #F8F5F1;
+  --popover: #211B1B;
+  --popover-foreground: #F8F5F1;
+  --primary: #D34A58;
+  --primary-foreground: #FFFFFF;
+  --secondary: #2A2323;
+  --secondary-foreground: #F8F5F1;
+  --muted: #2A2323;
+  --muted-foreground: #B7AAA0;
+  --accent: #2A2323;
+  --accent-foreground: #F8F5F1;
+  --destructive: #D34A58;
+  --border: rgba(255,255,255,0.08);
+  --input: rgba(255,255,255,0.12);
+  --ring: #D34A58;
+
+  --sidebar: #1B1616;
+  --sidebar-foreground: #F8F5F1;
+  --sidebar-primary: #D34A58;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #2A2323;
+  --sidebar-accent-foreground: #F8F5F1;
+  --sidebar-border: rgba(255,255,255,0.08);
+  --sidebar-ring: #D34A58;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply font-sans;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
 }

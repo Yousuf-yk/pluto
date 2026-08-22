@@ -4,52 +4,52 @@ import { User, Mail, Lock, UserPlus } from "lucide-react";
 import { register } from "../services/authApi";
 
 const Register = () => {
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
-const [formData, setFormData] = useState({
-name: "",
-email: "",
-password: ""
-});
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: ""
+  });
 
-const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-const handleChange = (e) => {
-setFormData({
-...formData,
-[e.target.name]: e.target.value
-});
-};
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
 
-const handleSubmit = async (e) => {
-e.preventDefault();
-
-
-try {
-  setLoading(true);
-
-  await register(formData);
-
-  alert("Registration successful");
-
-  navigate("/login");
-} catch (err) {
-  alert(err.response?.data?.message || err.message);
-} finally {
-  setLoading(false);
-}
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
 
-};
+    try {
+      setLoading(true);
 
-return ( <div className="flex min-h-screen items-center justify-center bg-[var(--color-background)] px-4 py-8"> <div className="w-full max-w-md rounded-[var(--radius-2xl)] border bg-[var(--color-surface)] p-8 shadow-[var(--shadow-xl)] border-[var(--color-border)] sm:p-10"> <div className="mb-8 text-center"> <h1 className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-4xl font-black text-transparent">
-Pluto. </h1>
+      await register(formData);
+
+      alert("Registration successful");
+
+      navigate("/login");
+    } catch (err) {
+      alert(err.response?.data?.message || err.message);
+    } finally {
+      setLoading(false);
+    }
 
 
-      <p className="mt-3 text-[var(--color-text-muted)]">
-        Create your account and start shopping.
-      </p>
-    </div>
+  };
+
+  return (<div className="flex min-h-screen items-center justify-center bg-[var(--color-background)] px-4 py-8"> <div className="w-full max-w-md rounded-[var(--radius-2xl)] border bg-[var(--color-surface)] p-8 shadow-[var(--shadow-xl)] border-[var(--color-border)] sm:p-10"> <div className="mb-8 text-center"> <h1 className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-clip-text text-4xl font-black text-transparent">
+    Pluto. </h1>
+
+
+    <p className="mt-3 text-[var(--color-text-muted)]">
+      Create your account and start shopping.
+    </p>
+  </div>
 
     <form onSubmit={handleSubmit} className="space-y-5">
       <div className="relative">
@@ -124,10 +124,10 @@ Pluto. </h1>
       </Link>
     </div>
   </div>
-</div>
+  </div>
 
 
-);
+  );
 };
 
 export default Register;

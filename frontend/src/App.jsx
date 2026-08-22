@@ -3,26 +3,54 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/home";
 import Login from "./pages/login";
 import Register from "./pages/register";
-import ProtectedRoute from "./routes/ProtectedRoute";
 import Cart from "./pages/cart";
 import Wishlist from "./pages/Wishlist";
+import Admin from "./pages/admin";
+import Profile from "./pages/profile";
+
+import ProtectedRoute from "./routes/ProtectedRoute";
+import PublicRoute from "./routes/PublicRoute";
+import AdminRoute from "./routes/AdminRoute";
 
 function App() {
-
     return (
-
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Home />} />
+
+                {/* =========================
+                    PUBLIC ROUTES
+                ========================= */}
+
+                <Route
+                    path="/"
+                    element={<Home />}
+                />
+
+                {/* Login only for logged-out users */}
                 <Route
                     path="/login"
-                    element={<Login />}
+                    element={
+                        <PublicRoute>
+                            <Login />
+                        </PublicRoute>
+                    }
                 />
+
+                {/* Register only for logged-out users */}
                 <Route
                     path="/register"
-                    element={<Register />}
+                    element={
+                        <PublicRoute>
+                            <Register />
+                        </PublicRoute>
+                    }
                 />
-                
+
+
+                {/* =========================
+                    PROTECTED USER ROUTES
+                ========================= */}
+
                 <Route
                     path="/cart"
                     element={
@@ -31,6 +59,7 @@ function App() {
                         </ProtectedRoute>
                     }
                 />
+
                 <Route
                     path="/wishlist"
                     element={
@@ -40,13 +69,32 @@ function App() {
                     }
                 />
 
+                <Route
+                    path="/profile"
+                    element={
+                        <ProtectedRoute>
+                            <Profile />
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                {/* =========================
+                    ADMIN ROUTE
+                ========================= */}
+
+                <Route
+                    path="/admin"
+                    element={
+                        <AdminRoute>
+                            <Admin />
+                        </AdminRoute>
+                    }
+                />
+
             </Routes>
-
-
         </BrowserRouter>
-
     );
-
 }
 
 export default App;
