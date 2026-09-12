@@ -1,16 +1,18 @@
+
 import express from "express";
 import multer from "multer";
 import path from "path";
 
 import {
-    getProducts,
-    editProduct,
-    deleteProduct,
+  getProducts,
+  searchProducts,
+  editProduct,
+  deleteProduct,
 } from "../controller/productController.js";
 
 import {
-    verifyToken,
-    verifyAdmin,
+  verifyToken,
+  verifyAdmin,
 } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
@@ -21,55 +23,52 @@ const router = express.Router();
 // ================================
 
 const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
 
-    destination: (req, file, cb) => {
-        cb(null, "uploads/");
-    },
+  filename: (req, file, cb) => {
+    const uniqueName =
+      `${Date.now()}${path.extname(file.originalname)}`;
 
-    filename: (req, file, cb) => {
-
-        const uniqueName =
-            `${Date.now()}${path.extname(file.originalname)}`;
-
-        cb(null, uniqueName);
-    },
-
+    cb(null, uniqueName);
+  },
 });
 
 const upload = multer({
-    storage,
+  storage,
 });
 
 
 // ================================
-// PUBLIC
+// PUBLIC ROUTES
 // ================================
 
-router.get(
-    "/",
-    getProducts
-);
+// GET ALL PRODUCTS
+router.get("/", getProducts);
+
+// SEARCH PRODUCTS
+router.get("/search", searchProducts);
 
 
 // ================================
-// ADMIN
+// ADMIN ROUTES
 // ================================
 
 router.put(
-    "/:id",
-    verifyToken,
-    verifyAdmin,
-    upload.single("image"),
-    editProduct
+  "/:id",
+  verifyToken,
+  verifyAdmin,
+  upload.single("image"),
+  editProduct
 );
-
 
 router.delete(
-    "/:id",
-    verifyToken,
-    verifyAdmin,
-    deleteProduct
+  "/:id",
+  verifyToken,
+  verifyAdmin,
+  deleteProduct
 );
 
-
 export default router;
+

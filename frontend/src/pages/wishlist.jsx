@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Heart, ShoppingCart, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import Navbar from "../components/navbar";
-import Footer from "../components/footer";
+import Navbar from "../components/custom/navbar";
+import Footer from "../components/custom/footer";
 
 import {
 getWishlist,

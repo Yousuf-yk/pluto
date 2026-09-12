@@ -2,23 +2,60 @@ import fs from "fs";
 import path from "path";
 
 import {
-    getAllProducts,
-    getProductById,
-    updateProduct,
-    deleteProduct as deleteProductModel,
+  getAllProducts,
+  searchProducts as searchProductsModel,
+  getProductById,
+  updateProduct,
+  deleteProduct as deleteProductModel,
 } from "../models/productModel.js";
 
 // Get all products
+// Get all products with category filter and sorting
 export const getProducts = async (req, res) => {
     try {
-        const products = await getAllProducts();
+        const { category, sort } = req.query;
+
+        const products = await getAllProducts(category, sort);
+
         res.status(200).json(products);
     } catch (error) {
+        console.error("Get products error:", error);
+
         res.status(500).json({
             message: error.message,
         });
     }
 };
+
+
+// ================================
+// SEARCH PRODUCTS
+// ================================
+export const searchProducts = async (req, res) => {
+  try {
+    const { q } = req.query;
+
+    // Empty search
+    if (!q || !q.trim()) {
+      return res.status(400).json({
+        message: "Search query is required",
+      });
+    }
+
+    const products = await searchProductsModel(q.trim());
+
+    res.status(200).json(products);
+
+  } catch (error) {
+    console.error("Search products error:", error);
+
+    res.status(500).json({
+      message: "Failed to search products",
+    });
+  }
+};
+
+
 
 // Edit product
 export const editProduct = async (req, res) => {
