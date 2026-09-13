@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import ScrollToTop from "./ScrollToTop";
 import Home from "./pages/home";
 import Login from "./pages/login";
 import Register from "./pages/register";
@@ -7,6 +7,7 @@ import Cart from "./pages/cart";
 import Wishlist from "./pages/Wishlist";
 import Admin from "./pages/admin";
 import Profile from "./pages/profile";
+import ProductPreview from "./pages/product-preview";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
@@ -15,8 +16,8 @@ import AdminRoute from "./routes/AdminRoute";
 function App() {
     return (
         <BrowserRouter>
+         <ScrollToTop />
             <Routes>
-
                 {/* =========================
                     PUBLIC ROUTES
                 ========================= */}
@@ -24,6 +25,11 @@ function App() {
                 <Route
                     path="/"
                     element={<Home />}
+                />
+
+                <Route
+                    path="/products/:id"
+                    element={<ProductPreview />}
                 />
 
                 {/* Login only for logged-out users */}
@@ -45,7 +51,6 @@ function App() {
                         </PublicRoute>
                     }
                 />
-
 
                 {/* =========================
                     PROTECTED USER ROUTES
@@ -78,7 +83,6 @@ function App() {
                     }
                 />
 
-
                 {/* =========================
                     ADMIN ROUTE
                 ========================= */}
@@ -91,7 +95,6 @@ function App() {
                         </AdminRoute>
                     }
                 />
-
             </Routes>
         </BrowserRouter>
     );
